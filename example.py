@@ -1,15 +1,16 @@
 import os
-from santacruz_watersmart.sqlite import SQLiteStorage
-from santacruz_watersmart.client import SCMU
 
-username = os.environ.get('SCMU_USERNAME')
-password = os.environ.get('SCMU_PASSWORD')
+from vertexone_watersmart.client import Client
+from vertexone_watersmart.sqlite import SQLiteStorage
+
+username = os.environ.get('V1WS_USERNAME')
+password = os.environ.get('V1WS_PASSWORD')
 
 # optional, instantiate a backend store
-db = SQLiteStorage('scmu.db', echo=True) # set echo=False to turn logs off
-# instantiate the client
-scmu = SCMU(storage_engine=db, username=username, password=password)
-
+db = SQLiteStorage('scmu.db', echo=False) # set echo=False to turn logs off
+# instantiate the client, choosing a known provider
+scmu = Client(provider='santacruz', storage_engine=db)
+scmu.login(username=username, password=password)
 # fetch latest dataset
 daily_data = scmu.daily.fetch()
 print(daily_data[:10])

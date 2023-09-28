@@ -1,17 +1,19 @@
 import asyncio
 import os
-from santacruz_watersmart.sqlite import SQLiteStorage
-from santacruz_watersmart.client import SCMU
 from datetime import datetime
+
+from vertexone_watersmart.client import Client
+from vertexone_watersmart.sqlite import SQLiteStorage
 
 
 async def main():
-    username = os.environ.get('SCMU_USERNAME')
-    password = os.environ.get('SCMU_PASSWORD')
+    username = os.environ.get('V1WS_USERNAME')
+    password = os.environ.get('V1WS_PASSWORD')
 
     db = SQLiteStorage('scmu.db', echo=True) # set echo=False to turn logs off
-    scmu = SCMU(storage_engine=db, username=username, password=password, is_async=True)
+    scmu = Client(provider='santacruz', storage_engine=db, is_async=True)
     
+    scmu.login(username=username, password=password)
     # fetch latest dataset
     [daily_data, hourly_data] = await asyncio.gather(*[
         scmu.daily.fetch(),
