@@ -10,10 +10,10 @@ async def main():
     username = os.environ.get('V1WS_USERNAME')
     password = os.environ.get('V1WS_PASSWORD')
 
-    db = SQLiteStorage('scmu.db', echo=True) # set echo=False to turn logs off
+    db = SQLiteStorage('scmu.db', echo=False) # set echo=False to turn logs off
     scmu = Client(provider='santacruz', storage_engine=db, is_async=True)
     
-    scmu.login(username=username, password=password)
+    await scmu.login(username=username, password=password)
     # fetch latest dataset
     [daily_data, hourly_data] = await asyncio.gather(*[
         scmu.daily.fetch(),

@@ -189,7 +189,7 @@ class AsyncClient(SyncClient):
             # login
             payload = {"email": self.username, "password": self.password}
             req = await client.post(
-                url=self.login, headers=self.headers, data=payload, cookies=self.jar
+                url=self.login_url, headers=self.headers, data=payload, cookies=self.jar
             )
             self._check_status_code(req)
             self.jar = self._merge_cookies(self.jar, req)
